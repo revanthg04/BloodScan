@@ -1,0 +1,307 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<h1 align="center">DOC</h1>
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link{% if user.has_profile() %} active{% endif %}" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="diagnosis-tab" data-toggle="tab" href="#diagnosis" role="tab" aria-controls="diagnosis" aria-selected="false">Diagnosis</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="diet-tab" data-toggle="tab" href="#diet" role="tab" aria-controls="diet" aria-selected="false">Diet Management</a>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade{% if user.has_profile() %} show active{% endif %}" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+    {% if user.has_profile() %}
+    <h2>Profile</h2>
+    <div>
+        <p>Email: {{ user.email }}</p>
+        <p>First Name: {{ user.first_name }}</p>
+        <p>Age: {{ user.hr.age }}</p>
+        <p>Gender: {{ user.hr.gender }}</p>
+        <p>Medical Conditions: {{ user.hr.medical_conditions }}</p>
+        <form method="POST" action="/delete-profile">
+            <button type="submit" class="btn btn-danger">Delete Profile</button>
+        </form>
+      </div>
+    {% else %}
+      <form method="POST" action="/update-profile">
+        <div class="form-group">
+          <label for="age">Age:</label>
+          <input type="number" class="form-control" id="age" name="age">
+        </div>
+        <div class="form-group">
+          <label for="gender">Gender:</label>
+          <select class="form-control" id="gender" name="gender">
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+            <option value="O">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="medical_conditions">Medical Conditions:</label>
+          <textarea class="form-control" id="medical_conditions" name="medical_conditions" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </form>
+    {% endif %}
+  </div>
+  <div class="tab-pane fade" id="diagnosis" role="tabpanel" aria-labelledby="diagnosis-tab">
+    {% if user.has_diagnosis() %}
+    <h2>Diagnosis</h2>
+    <h3> ML Output </h3>
+    <p>Grade: {{ user.diagnosis.predictions }}</p>
+    <form method="POST" action="/delete-diagnosis">
+      <button type="submit" class="btn btn-danger">Delete diagnosis</button>
+    </form>
+    {% else %}
+    <form method="POST" action="/submit_diagnosis">
+      <div class="form-group">
+        <label for="gender">Gender:</label>
+        <select class="form-control" id="gender" name="gender">
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="years">Years:</label>
+        <input type="number" class="form-control" id="years" name="years">
+      </div>
+      <div class="form-group">
+        <label for="idh1">IDH1:</label>
+        <div>
+          <input type="radio" id="mutated" name="idh1" value="MUTATED">
+          <label for="mutated">Mutated</label>
+          <input type="radio" id="not_mutated" name="idh1" value="NOT_MUTATED">
+          <label for="not_mutated">Not Mutated</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="tp53">TP53:</label>
+        <div>
+          <input type="radio" id="mutated" name="tp53" value="MUTATED">
+          <label for="mutated">Mutated</label>
+          <input type="radio" id="not_mutated" name="tp53" value="NOT_MUTATED">
+          <label for="not_mutated">Not Mutated</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="atrx">ATRX:</label>
+        <div>
+          <input type="radio" id="mutated" name="atrx" value="MUTATED">
+          <label for="mutated">Mutated</label>
+          <input type="radio" id="not_mutated" name="atrx" value="NOT_MUTATED">
+          <label for="not_mutated">Not Mutated</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="pten">PTEN:</label>
+        <div>
+          <input type="radio" id="mutated" name="pten" value="MUTATED">
+          <label for="mutated">Mutated</label>
+          <input type="radio" id="not_mutated" name="pten" value="NOT_MUTATED">
+          <label for="not_mutated">Not Mutated</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="egfr">EGFR:</label>
+        <div>
+          <input type="radio" id="mutated" name="egfr" value="MUTATED">
+          <label for="mutated">Mutated</label>
+          <input type="radio" id="not_mutated" name="egfr" value="NOT_MUTATED">
+          <label for="not_mutated">Not Mutated</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="cic">CIC:</label>
+        <div>
+          <input type="radio" id="mutated" name="cic" value="MUTATED">
+          <label for="mutated">Mutated</label>
+          <input type="radio" id="not_mutated" name="cic" value="NOT_MUTATED">
+          <label for="not_mutated">Not Mutated</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="mcu16">MUC16:</label>
+        <div>
+          <input type="radio" id="mutated" name="muc16" value="MUTATED">
+          <label for="mutated">Mutated</label>
+          <input type="radio" id="not_mutated" name="muc16" value="NOT_MUTATED">
+          <label for="not_mutated">Not Mutated</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="pik3ca">PIK3CA:</label>
+        <div>
+          <input type="radio" id="mutated" name="pik3ca" value="MUTATED">
+          <label for="mutated">Mutated</label>
+          <input type="radio" id="not_mutated" name="pik3ca" value="NOT_MUTATED">
+          <label for="not_mutated">Not Mutated</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="nf1">NF1:</label>
+        <div>
+          <input type="radio" id="mutated" name="nf1" value="MUTATED">
+          <label for="mutated">Mutated</label>
+          <input type="radio" id="not_mutated" name="nf1" value="NOT_MUTATED">
+          <label for="not_mutated">Not Mutated</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="pik3r1">PIK3R1:</label>
+        <div>
+          <input type="radio" id="mutated" name="pik3r1" value="MUTATED">
+          <label for="mutated">Mutated</label>
+          <input type="radio" id="not_mutated" name="pik3r1" value="NOT_MUTATED">
+          <label for="not_mutated">Not Mutated</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="fubp1">FUBP1:</label>
+        <div>
+          <input type="radio" id="mutated" name="fubp1" value="MUTATED">
+          <label for="mutated">Mutated</label>
+          <input type="radio" id="not_mutated" name="fubp1" value="NOT_MUTATED">
+          <label for="not_mutated">Not Mutated</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="rb1">RB1:</label>
+        <div>
+          <input type="radio" id="mutated" name="rb1" value="MUTATED">
+          <label for="mutated">Mutated</label>
+          <input type="radio" id="not_mutated" name="rb1" value="NOT_MUTATED">
+          <label for="not_mutated">Not Mutated</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="notch1">NOTCH1:</label>
+        <div>
+          <input type="radio" id="mutated" name="notch1" value="MUTATED">
+          <label for="mutated">Mutated</label>
+          <input type="radio" id="not_mutated" name="notch1" value="NOT_MUTATED">
+          <label for="not_mutated">Not Mutated</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="bcor">BCOR:</label>
+        <div>
+          <input type="radio" id="mutated" name="bcor" value="MUTATED">
+          <label for="mutated">Mutated</label>
+          <input type="radio" id="not_mutated" name="bcor" value="NOT_MUTATED">
+          <label for="not_mutated">Not Mutated</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="csmd3">CSMD3:</label>
+        <div>
+          <input type="radio" id="mutated" name="csmd3" value="MUTATED">
+          <label for="mutated">Mutated</label>
+          <input type="radio" id="not_mutated" name="csmd3" value="NOT_MUTATED">
+          <label for="not_mutated">Not Mutated</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="smarca4">SMARCA4:</label>
+        <div>
+          <input type="radio" id="mutated" name="smarca4" value="MUTATED">
+          <label for="mutated">Mutated</label>
+          <input type="radio" id="not_mutated" name="smarca4" value="NOT_MUTATED">
+          <label for="not_mutated">Not Mutated</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="grin2a">GRIN2A:</label>
+        <div>
+          <input type="radio" id="mutated" name="grin2a" value="MUTATED">
+          <label for="mutated">Mutated</label>
+          <input type="radio" id="not_mutated" name="grin2a" value="NOT_MUTATED">
+          <label for="not_mutated">Not Mutated</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="idh2">IDH2:</label>
+        <div>
+          <input type="radio" id="mutated" name="idh2" value="MUTATED">
+          <label for="mutated">Mutated</label>
+          <input type="radio" id="not_mutated" name="idh2" value="NOT_MUTATED">
+          <label for="not_mutated">Not Mutated</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="fat4">FAT4:</label>
+        <div>
+          <input type="radio" id="mutated" name="fat4" value="MUTATED">
+          <label for="mutated">Mutated</label>
+          <input type="radio" id="not_mutated" name="fat4" value="NOT_MUTATED">
+          <label for="not_mutated">Not Mutated</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="pdgfra">PDGFRA:</label>
+        <div>
+          <input type="radio" id="mutated" name="pdgfra" value="MUTATED">
+          <label for="mutated">Mutated</label>
+          <input type="radio" id="not_mutated" name="pdgfra" value="NOT_MUTATED">
+          <label for="not_mutated">Not Mutated</label>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% endif %}
+  </div>
+  <div class="tab-pane fade" id="diet" role="tabpanel" aria-labelledby="diet-tab">
+    {% if user.has_diet() %}
+    <div>
+      <p>Food item: {{ user.diet.food_item}}</p>
+      <p>calories taken: {{ user.diet.calories}}</p>
+      <p>exercise: {{ user.diet.exercise}}</p>
+      <p>calories burned: {{ user.diet.calories_burned}}</p>
+      <p>Net calories: {{ user.diet.net_calories}}</p>
+      {% if user.diet.net_calories>=0 %}
+      <h3>Yay!!!!</h3>
+      {% else %}
+      <h3>Nay!!!!</h3>
+      {% endif %}
+      <form method="POST" action="/delete-diet">
+          <button type="submit" class="btn btn-danger">Delete diet</button>
+      </form>
+    </div>
+    {% else %}
+    <h2>Diet Management</h2>
+    <form action="/submit_diet" method="POST">
+        <div class="form-group">
+            <label for="food_item">Food Item:</label>
+            <input type="text" class="form-control" id="food_item" name="food_item">
+        </div>
+        <div class="form-group">
+            <label for="calories">Calories:</label>
+            <input type="number" class="form-control" id="calories" name="calories">
+        </div>
+
+        <div class="form-group">
+            <label for="exercise">Exercise:</label>
+            <select class="form-control" id="exercise" name="exercise">
+                <option value="running">Running</option>
+                <option value="cycling">Cycling</option>
+                <option value="swimming">Swimming</option>
+                <!-- Add more exercise options as needed -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="calories_burned">Calories Burned:</label>
+            <input type="number" class="form-control" id="calories_burned" name="calories_burned">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% endif %}
+
+</div>
+</div>
+{% endblock %}
